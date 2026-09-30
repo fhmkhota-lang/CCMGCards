@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+
+# logo working files
+logos/_original/
+_*.py
+
+# secure build staging
+.deploy-public/
