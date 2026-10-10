@@ -29,20 +29,20 @@ const PAGE_SZ = 12;
            'broadsheet' (DFA), 'magazine' (Bolander)                         */
 const CCMG_BLUE='#007DC5';
 const PUBLICATIONS = [
-  {key:'athlonenews',           name:'Athlone News',            color:CCMG_BLUE, site:'athlonenews.co.za',            city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'atlanticsun',           name:'Atlantic Sun',            color:CCMG_BLUE, site:'atlanticsun.co.za',            city:'Cape Town', region:'Western Cape', boxed:true},
+  {key:'athlonenews',           name:'Athlone News',            color:CCMG_BLUE, site:'athlonenews.co.za',            city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'atlanticsun',           name:'Atlantic Sun',            color:CCMG_BLUE, site:'atlanticsun.co.za',            city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
   {key:'bolander',              name:'Bolander',                color:'#B72079', site:'bolanderlifestyle.co.za',      city:'Cape Town', region:'Western Cape', boxed:true, style:'magazine'},
   {key:'capetowner',            name:'CapeTowner',              color:'#F0A830', site:'capetowner.co.za',             city:'Cape Town', region:'Western Cape', style:'lifestyle', ink:'#00183C'},
-  {key:'constantiabergbulletin',name:'Constantiaberg Bulletin', color:CCMG_BLUE, site:'constantiabergbulletin.co.za', city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'dfa',                   name:'DFA',                     color:'#D2232A', site:'dfa.co.za',                    city:'Kimberley', region:'Northern Cape', style:'broadsheet'},
-  {key:'falsebayecho',          name:'False Bay Echo',          color:CCMG_BLUE, site:'falsebayecho.co.za',           city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'isolezwelesixhosa',     name:'Isolezwe lesiXhosa',      color:'#00AEEF', site:'isolezwelesixhosa.co.za',      city:'Cape Town', region:'Western Cape'},
-  {key:'plainsman',             name:'Plainsman',               color:CCMG_BLUE, site:'plainsman.co.za',              city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'sentinelnews',          name:'Sentinel News',           color:CCMG_BLUE, site:'sentinelnews.co.za',           city:'Hout Bay',  region:'Western Cape', boxed:true},
-  {key:'southernmail',          name:'Southern Mail',           color:CCMG_BLUE, site:'southernmail.co.za',           city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'southernsuburbstatler', name:'Southern Suburbs Tatler', color:CCMG_BLUE, site:'southernsuburbstatler.co.za',  city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'tabletalk',             name:'Tabletalk',               color:CCMG_BLUE, site:'tabletalk.co.za',              city:'Cape Town', region:'Western Cape', boxed:true},
-  {key:'vukani',                name:'Vukani',                  color:CCMG_BLUE, site:'vukaninews.co.za',             city:'Cape Town', region:'Western Cape', boxed:true},
+  {key:'constantiabergbulletin',name:'Constantiaberg Bulletin', color:CCMG_BLUE, site:'constantiabergbulletin.co.za', city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'dfa',                   name:'DFA',                     color:'#D2232A', site:'dfa.co.za',                    city:'Kimberley', region:'Northern Cape', style:'panel'},
+  {key:'falsebayecho',          name:'False Bay Echo',          color:CCMG_BLUE, site:'falsebayecho.co.za',           city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'isolezwelesixhosa',     name:'Isolezwe lesiXhosa',      color:'#00AEEF', site:'isolezwelesixhosa.co.za',      city:'Cape Town', region:'Western Cape', style:'panel'},
+  {key:'plainsman',             name:'Plainsman',               color:CCMG_BLUE, site:'plainsman.co.za',              city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'sentinelnews',          name:'Sentinel News',           color:CCMG_BLUE, site:'sentinelnews.co.za',           city:'Hout Bay',  region:'Western Cape', boxed:true, style:'panel'},
+  {key:'southernmail',          name:'Southern Mail',           color:CCMG_BLUE, site:'southernmail.co.za',           city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'southernsuburbstatler', name:'Southern Suburbs Tatler', color:CCMG_BLUE, site:'southernsuburbstatler.co.za',  city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'tabletalk',             name:'Tabletalk',               color:CCMG_BLUE, site:'tabletalk.co.za',              city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
+  {key:'vukani',                name:'Vukani',                  color:CCMG_BLUE, site:'vukaninews.co.za',             city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
 ];
 const PUB = {}; PUBLICATIONS.forEach(p => PUB[p.key] = p);
 function pubCfg(key){ return PUB[key] || PUBLICATIONS[0]; }
@@ -588,12 +588,104 @@ function drawTextBlock(ctx,p,W,H,isReel,areaTop,areaBottom){
   ctx.restore();
 }
 
+/* ── Panel card ───────────────────────────────────────────────────────────
+   The Athlone News layout, now the house style for the CCMG titles: photo on
+   top, solid brand panel beneath carrying the headline, a white READ MORE
+   button and the site address, with two darker diagonal wedges bottom-right.
+   Logo sits top-left on the photo via the usual chip logic, so boxed
+   mastheads draw as-is and the rest get a chip.                            */
+function shade(hex,f){
+  const m=/^#?([0-9a-f]{6})$/i.exec(String(hex||'').trim());
+  if(!m) return hex;
+  const n=parseInt(m[1],16);
+  const r=Math.round(((n>>16)&255)*f), g=Math.round(((n>>8)&255)*f), b=Math.round((n&255)*f);
+  return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,v)).toString(16).padStart(2,'0')).join('');
+}
+function drawPanelCard(ctx,p,W,H,isReel){
+  const cfg=pubCfg(p.pub);
+  const brand=cfg.color||CCMG_BLUE;
+  const dark=cfg.dark||shade(brand,0.78), darker=cfg.darker||shade(brand,0.55);
+  const M=isReel?70:58;
+
+  const panelTop=Math.round(H*(isReel?0.70:0.675));
+  const panelH=H-panelTop;
+
+  ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.beginPath();ctx.rect(0,0,W,panelTop);ctx.clip();
+  drawPhoto(ctx,p,W,panelTop,isReel?p.reelImgX:p.sqImgX,isReel?p.reelImgY:p.sqImgY,(isReel?p.reelImgScale:p.sqImgScale)||1);
+  ctx.restore();
+
+  ctx.fillStyle=brand;ctx.fillRect(0,panelTop,W,panelH);
+  ctx.save();ctx.beginPath();ctx.rect(0,panelTop,W,panelH);ctx.clip();
+  ctx.fillStyle=dark;
+  ctx.beginPath();ctx.moveTo(W*0.74,H);ctx.lineTo(W,panelTop+panelH*0.18);ctx.lineTo(W,H);ctx.closePath();ctx.fill();
+  ctx.fillStyle=darker;
+  ctx.beginPath();ctx.moveTo(W*0.88,H);ctx.lineTo(W,panelTop+panelH*0.52);ctx.lineTo(W,H);ctx.closePath();ctx.fill();
+  ctx.restore();
+
+  let bannerH=0; if(p.breaking) bannerH=drawBreakingBanner(ctx,p,W,isReel);
+  drawLogoChip(ctx,p,M,(isReel?54:44)+bannerH,isReel);
+
+  const innerW=W-M*2;
+  const btnH=isReel?72:60, btnGap=isReel?28:22;
+  const urlFs=isReel?28:24, urlGap=isReel?20:16;
+  const padTop=isReel?44:34, padBot=isReel?36:30;
+  const avail=panelH-padTop-padBot-btnH-btnGap-urlFs-urlGap;
+
+  let fs=isReel?74:66, lines, lineH;
+  while(true){
+    ctx.font=`800 ${fs}px Poppins,sans-serif`;
+    lines=wrapWords(ctx,parseHi(p.headline||'',false),innerW);
+    lineH=Math.round(fs*1.12);
+    if(lines.length*lineH<=avail||fs<=30)break;
+    fs-=2;
+  }
+
+  let y=panelTop+padTop;
+  ctx.save();
+  ctx.font=`800 ${fs}px Poppins,sans-serif`;ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#FFFFFF';
+  const spaceW=ctx.measureText(' ').width;
+  lines.forEach(line=>{
+    let cx=M;
+    line.forEach(word=>{ctx.fillText(word.text,cx,y+fs);cx+=ctx.measureText(word.text).width+spaceW;});
+    y+=lineH;
+  });
+  ctx.restore();
+
+  // READ MORE button
+  y+=btnGap;
+  const label='READ MORE', bfs=isReel?30:26, btr=isReel?3:2.5;
+  ctx.save();
+  ctx.font=`800 ${bfs}px Poppins,sans-serif`;
+  const tw=measTracked(ctx,label,btr);
+  const arrowW=isReel?54:46, arrowGap=isReel?30:26, bpad=isReel?34:28;
+  ctx.fillStyle='#FFFFFF';roundRect(ctx,M,y,tw+arrowW+arrowGap+bpad*2,btnH,isReel?8:6);ctx.fill();
+  ctx.fillStyle=brand;ctx.textBaseline='middle';ctx.textAlign='left';
+  const cy=y+btnH/2+1;
+  drawTracked(ctx,label,M+bpad,cy,btr);
+  const ax=M+bpad+tw+arrowGap;
+  ctx.strokeStyle=brand;ctx.lineWidth=isReel?5:4;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();ctx.moveTo(ax,cy);ctx.lineTo(ax+arrowW,cy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ax+arrowW-(isReel?18:15),cy-(isReel?14:12));ctx.lineTo(ax+arrowW,cy);
+  ctx.lineTo(ax+arrowW-(isReel?18:15),cy+(isReel?14:12));ctx.stroke();
+  ctx.restore();
+
+  y+=btnH+urlGap;
+  ctx.save();
+  ctx.font=`500 ${urlFs}px Poppins,sans-serif`;ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  ctx.fillStyle='rgba(255,255,255,0.95)';
+  ctx.fillText((cfg.site||'').toLowerCase(),M,y+urlFs);
+  ctx.restore();
+}
+
 function drawTitleCard(ctx,p,W,H,isReel){
   // Lifestyle titles get a softer, cleaner card of their own.
   const st=pubCfg(p.pub).style;
   if(st==='lifestyle') return drawLifestyleCard(ctx,p,W,H,isReel);
   if(st==='broadsheet') return drawBroadsheetCard(ctx,p,W,H,isReel);
   if(st==='magazine') return drawMagazineCard(ctx,p,W,H,isReel);
+  if(st==='panel') return drawPanelCard(ctx,p,W,H,isReel);
   const imgX=isReel?p.reelImgX:p.sqImgX, imgY=isReel?p.reelImgY:p.sqImgY, sc=(isReel?p.reelImgScale:p.sqImgScale)||1;
   drawPhotoAndOverlay(ctx,p,W,H,imgX,imgY,sc);
   const barH=drawBottomBar(ctx,p,W,H,isReel);
