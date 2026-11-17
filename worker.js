@@ -9,7 +9,7 @@
  */
 const CORS = {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type'};
 
-// The 14 Cape Community Media Group (CCMG) titles. Every title runs its own
+// The 15 Cape Community Media Group (CCMG) titles. Every title runs its own
 // site at <title>.co.za with an RSS feed at /rss/ (verified 2026-09-30:
 // 30 items each with media:content images; CapeTowner 50). Two exceptions to
 // the <name>.co.za rule: Vukani lives at vukaninews.co.za and Bolander at
@@ -29,6 +29,7 @@ const PUBS = {
   capetowner:             [],
   constantiabergbulletin: [],
   falsebayecho:           [],
+  northernnews:           [],
   plainsman:              [],
   sentinelnews:           [],
 };
@@ -46,6 +47,7 @@ const LABELS = {
   capetowner:'CapeTowner',
   constantiabergbulletin:'Constantiaberg Bulletin',
   falsebayecho:'False Bay Echo',
+  northernnews:'Northern News',
   plainsman:'Plainsman',
   sentinelnews:'Sentinel News',
 };
@@ -62,6 +64,7 @@ const FEED_URLS = {
   capetowner:             ['https://capetowner.co.za/rss/'],
   constantiabergbulletin: ['https://constantiabergbulletin.co.za/rss/'],
   falsebayecho:           ['https://falsebayecho.co.za/rss/'],
+  northernnews:           ['https://northernnews.co.za/rss/'],
   plainsman:              ['https://plainsman.co.za/rss/'],
   sentinelnews:           ['https://sentinelnews.co.za/rss/'],
 };
@@ -79,6 +82,7 @@ const TITLE_MARKERS = {
   capetowner:             ['capetowner.co.za','/capetowner/'],
   constantiabergbulletin: ['constantiabergbulletin.co.za','/constantiaberg-bulletin/'],
   falsebayecho:           ['falsebayecho.co.za','/false-bay-echo/'],
+  northernnews:           ['northernnews.co.za','/northern-news/'],
   plainsman:              ['plainsman.co.za','/plainsman/'],
   sentinelnews:           ['sentinelnews.co.za','/sentinel-news/'],
 };

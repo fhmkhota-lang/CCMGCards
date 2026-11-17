@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    CCMG CARDS — Social Card Studio
-   Cape Community Media Group: 14 community titles. Forked from IOL Titles
+   Cape Community Media Group: 15 community titles. Forked from IOL Titles
    (same feed/designer/carousel/infographic/ticks), with its own worker.
    Card themes: 'classic' masthead card for most titles, plus bespoke styles
    for CapeTowner (lifestyle), DFA (broadsheet) and Bolander (magazine).
@@ -36,6 +36,7 @@ const PUBLICATIONS = [
   {key:'dfa',                   name:'DFA',                     color:'#D2232A', site:'dfa.co.za',                    city:'Kimberley', region:'Northern Cape', style:'panel'},
   {key:'falsebayecho',          name:'False Bay Echo',          color:CCMG_BLUE, site:'falsebayecho.co.za',           city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
   {key:'isolezwelesixhosa',     name:'Isolezwe lesiXhosa',      color:'#00AEEF', site:'isolezwelesixhosa.co.za',      city:'Cape Town', region:'Western Cape', style:'panel'},
+  {key:'northernnews',          name:'Northern News',           color:'#0E2A5E', site:'northernnews.co.za',           city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
   {key:'plainsman',             name:'Plainsman',               color:CCMG_BLUE, site:'plainsman.co.za',              city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},
   {key:'sentinelnews',          name:'Sentinel News',           color:CCMG_BLUE, site:'sentinelnews.co.za',           city:'Hout Bay',  region:'Western Cape', boxed:true, style:'panel'},
   {key:'southernmail',          name:'Southern Mail',           color:CCMG_BLUE, site:'southernmail.co.za',           city:'Cape Town', region:'Western Cape', boxed:true, style:'panel'},

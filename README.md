@@ -1,6 +1,6 @@
 # CCMG Cards — Social Card Studio
 
-Social-card studio for the 14 Cape Community Media Group (CCMG) titles. A fork
+Social-card studio for the 15 Cape Community Media Group (CCMG) titles. A fork
 of IOL Titles (`fhmkhota-lang/IOLTitles`) with the same features — live
 per-title feeds, search, + From URL, Single / Carousel / Infographic (AI key
 points), breaking-news banner, colour/white logo picker, Square + Reel
@@ -17,7 +17,7 @@ site and workers.
 | `data.js` | Empty offline fallback (all titles have live feeds) |
 | `logos/` | `<key>.png` (colour) + `<key>-white.png` per title, `ccmg.png` header logo |
 
-## The 14 titles and feeds (verified 2026-09-30)
+## The 15 titles and feeds (verified 2026-09-30)
 Each title's own site `https://<site>/rss/` — 30 items with images (CapeTowner 50).
 
 | Key | Title | Site | Theme |
@@ -30,6 +30,7 @@ Each title's own site `https://<site>/rss/` — 30 items with images (CapeTowner
 | dfa | DFA (Diamond Fields Advertiser) | dfa.co.za | broadsheet |
 | falsebayecho | False Bay Echo | falsebayecho.co.za | classic |
 | isolezwelesixhosa | Isolezwe lesiXhosa | isolezwelesixhosa.co.za | classic |
+| northernnews | Northern News | northernnews.co.za | panel |
 | plainsman | Plainsman | plainsman.co.za | classic |
 | sentinelnews | Sentinel News | sentinelnews.co.za | classic |
 | southernmail | Southern Mail | southernmail.co.za | classic |
